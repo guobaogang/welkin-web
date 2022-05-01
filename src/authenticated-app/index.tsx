@@ -1,4 +1,4 @@
-import {useAuth} from "../context/auto-context";
+import {useAuth} from "context/auth-context";
 
 export const AuthenticatedApp = () => {
     const {logout} = useAuth();

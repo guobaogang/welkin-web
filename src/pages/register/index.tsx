@@ -1,22 +1,31 @@
 import React from "react";
 import {useAuth} from "context/auth-context";
-import {Button, Form, Input} from "antd";
+import {Form, Input, Button} from "antd";
 import {useAsync} from "utils/use-async";
 
-export const LoginScreen = ({
-                                onError,
-                            }: {
+export const RegisterScreen = ({
+                                   onError,
+                               }: {
     onError: (error: Error) => void;
 }) => {
-    const {login} = useAuth();
+    const {register} = useAuth();
     const {run, isLoading} = useAsync(undefined, {throwOnError: true});
 
     // HTMLFormElement extends Element
-    const handleSubmit = (values: {
+    const handleSubmit = ({
+                              cpassword,
+                              ...values
+                          }: {
         username: string;
         password: string;
+        cpassword: string;
     }) => {
-        run(login(values)).catch(e => onError(e));
+        if (cpassword !== values.password) {
+            onError(new Error("请确认两次输入的密码相同"));
+            return;
+        }
+        run(register(values))
+          .catch(e => onError(e));
     };
 
     return (
@@ -33,9 +42,15 @@ export const LoginScreen = ({
           >
               <Input placeholder={"密码"} type="password" id={"password"}/>
           </Form.Item>
+          <Form.Item
+            name={"cpassword"}
+            rules={[{required: true, message: "请确认密码"}]}
+          >
+              <Input placeholder={"确认密码"} type="password" id={"cpassword"}/>
+          </Form.Item>
           <Form.Item>
               <Button style={{width: '100%'}} loading={isLoading} htmlType={"submit"} type={"primary"}>
-                  登录
+                  注册
               </Button>
           </Form.Item>
       </Form>
