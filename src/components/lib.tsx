@@ -1,17 +1,27 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import {Spin, Typography} from "antd";
-import './lib.less';
+
+const FullPage = ({children}: { children: ReactNode }) => (
+  <div style={{
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+  }}>
+      {children}
+  </div>
+)
 
 export const FullPageLoading = () => (
-  <div className={'full-page'}>
+  <FullPage>
       <Spin size={"large"}/>
-  </div>
+  </FullPage>
 );
 
 export const FullPageErrorFallback = ({error}: { error: Error | null }) => (
-  <div className={'full-page'}>
+  <FullPage>
       <ErrorBox error={error}/>
-  </div>
+  </FullPage>
 );
 
 // 类型守卫
